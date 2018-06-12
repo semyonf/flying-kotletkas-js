@@ -21,6 +21,6 @@
     "tests"
   ],
   "dependencies": {
-    "three.js": "threejs#r93"
+    "three.js": "threejs#r92"
   }
 }
