@@ -1,0 +1,28 @@
+{
+  "name": "flying-kotletkas",
+  "private": true,
+  "version": "1.0.0",
+  "description": "A three.js particle system plugin I wouldn't dare to use!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/taxnuke/flying-kotletkas-js.git"
+  },
+  "keywords": [
+    "three-js",
+    "plugin",
+    "particle-system"
+  ],
+  "author": "Semyon Fomin <taxnuke@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/taxnuke/flying-kotletkas-js/issues"
+  },
+  "homepage": "https://github.com/taxnuke/flying-kotletkas-js#readme",
+  "devDependencies": {
+    "bower": "^1.8.4"
+  }
+}
