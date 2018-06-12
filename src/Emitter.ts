@@ -1,29 +1,33 @@
 /// <reference path="Particle.ts" />
 
-class Emitter {
-  private particleMesh: THREE.Mesh;
-  private scene: THREE.Scene;
+namespace Kotletkas {
+  export class Emitter {
+    emitParticle(existingParticle?: Particle, prepare?: (particle: Particle) => Particle) {
+      let particleToEmit: Particle;
 
-  emitParticle(prepare: (particle: Particle) => Particle, existingParticle?: Particle) {
-    let particleToEmit: Particle;
+      if (existingParticle) {
+        particleToEmit = existingParticle;
+      } else {
+        particleToEmit = new Particle(this.particleParams);
+        this.scene.add(particleToEmit.mesh);
+      }
 
-    if (existingParticle) {
-      particleToEmit = existingParticle;
-    } else {
-      particleToEmit = new Particle(this.particleMesh);
-      this.scene.add(particleToEmit.mesh);
+      particleToEmit.mesh.position.set(0, 0, 0);
+      particleToEmit.velocity = new THREE.Vector3(Math.random() / 10 - 0.035, Math.random() / 10 - 0.035, 0.5);
+
+      if (prepare) {
+        return prepare(particleToEmit);
+      }
+
+      return particleToEmit;
     }
 
-    particleToEmit.mesh.position.set(
-      this.mesh.position.x,
-      this.mesh.position.y,
-      this.mesh.position.z
-    );
-
-    return prepare(particleToEmit);
-  }
-
-  constructor(scene: THREE.Scene, public mesh: THREE.Mesh) {
-    scene.add(this.mesh);
+    constructor(
+      private scene: THREE.Scene,
+      public mesh: THREE.Mesh,
+      private particleParams: {geometry: THREE.Geometry, material: THREE.Material}
+    ) {
+        scene.add(this.mesh);
+      }
   }
 }
