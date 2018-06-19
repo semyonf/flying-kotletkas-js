@@ -1,18 +1,15 @@
-/// <reference path="Emitter.ts" />
-
 namespace Kotletkas {
-  export class Particle {
-    mesh: THREE.Mesh;
-    velocity: THREE.Vector3;
-    framesAlive: number = 0;
+  export class Particle extends THREE.Mesh {
+    public velocity: THREE.Vector3;
+    public framesAlive: number = 0;
 
     constructor(
-      particleParams: {geometry: THREE.Geometry, material: THREE.Material}
+      geometry: THREE.Geometry,
+      material: THREE.Material,
+      velocity: THREE.Vector3 = new THREE.Vector3(0, 0, 0)
     ) {
-      this.mesh = new THREE.Mesh(
-        particleParams.geometry,
-        particleParams.material
-      );
+      super(geometry, material);
+      this.velocity = velocity;
     }
   }
 }

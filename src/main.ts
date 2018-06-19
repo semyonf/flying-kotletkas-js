@@ -1,4 +1,33 @@
+/// <reference path="Sandbox.ts" />
+
 ;(function($3, windowWidth, windowHeight, undefined) { 'use strict';
+  const k = new Kotletkas.Sandbox({
+    "camera": new $3.PerspectiveCamera(80, windowWidth / windowHeight),
+    "trails": false,
+    "objects": [{
+      "name": "mainEmitter",
+      "role": "emitter",
+      "mesh": null,
+      "position": {"x": 0, "y": 0, "z": 0},
+      "direction": {"x": 0, "y": 0, "z": 1},
+      "onBeforeEmit": function () {
+
+      },
+      "onAfterRender": function () {
+
+      },
+      "particleMesh": null,
+      "particleCount": 100,
+      "particleLifespan": 180,
+    }, {
+      "name": "cone",
+      "role": "anti-attractor",
+      "strength": 1,
+      "mesh": null,
+      "position": {"x": 0, "y": 0, "z": 20},
+    }]
+  });
+
   const scene = new $3.Scene();
 
   const camera = new $3.PerspectiveCamera(80, windowWidth / windowHeight);
