@@ -56,6 +56,7 @@ declare namespace Kotletkas {
     class Sandbox {
         private scene;
         private emitter;
+        private particleLifeSpan;
         private statics;
         private particles;
         private createEmitter;

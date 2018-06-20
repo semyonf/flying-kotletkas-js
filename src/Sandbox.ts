@@ -9,6 +9,7 @@ namespace Kotletkas {
   export class Sandbox {
     private scene: THREE.Scene;
     private emitter: Emitter;
+    private particleLifeSpan: number;
     private statics: Array<THREE.Mesh> = [];
     private particles: Array<Particle> = [];
 
@@ -18,7 +19,9 @@ namespace Kotletkas {
           this.emitter = new Emitter(
             e.geometry,
             e.material,
-            e.particleParams);
+            e.particleParams
+          );
+
           break;
 
         default:
@@ -27,13 +30,24 @@ namespace Kotletkas {
           break;
       }
 
+      this.emitter.position.set(e.position.x, e.position.y, e.position.z);
       this.scene.add(this.emitter);
     }
 
     public prepareToRender(): void {
       for (var i = this.particles.length - 1; i >= 0; i--) {
+        const particle: Particle = this.particles[i];
+        particle.position.add(particle.velocity);
+        particle.framesAlive++;
+        if (
+          particle.position.distanceTo(this.emitter.position) > 20 ||
+          particle.framesAlive > this.particleLifeSpan
+        ) {
+          particle.framesAlive = 0;
+          this.emitter.emitParticle(particle);
+        }
+
         // every forcefield should affect every particle here
-        this.particles[i].position.add(this.particles[i].velocity);
       }
     }
 
@@ -47,6 +61,7 @@ namespace Kotletkas {
         this.scene.add(newParticle);
         this.particles.push(newParticle);
       }
+      this.particleLifeSpan = config.emitter.particleParams.lifespan;
 
       for (var i = config.forceFields.length - 1; i >= 0; i--) {
         // this.createForceField(config.forceFields[i]);

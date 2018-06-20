@@ -6,11 +6,11 @@ namespace Kotletkas {
     public particleParams: IParticleParams
 
     public onNewParicleEmit(newParticle: Particle) {
-
+      newParticle.velocity = new THREE.Vector3(0, 0, 0.5 * Math.random());
     }
 
     public onExistingParicleEmit(existingParticle: Particle) {
-
+      existingParticle.velocity = new THREE.Vector3(0, 0, Math.random());
     }
 
     emitParticle(existingParticle?: Particle) {
@@ -24,7 +24,6 @@ namespace Kotletkas {
           this.particleParams.geometry,
           this.particleParams.material
         );
-        particleToEmit.velocity = new THREE.Vector3(0, 0, 0.5 * Math.random());
         this.onNewParicleEmit(particleToEmit);
       }
 

@@ -34,8 +34,10 @@ var Kotletkas;
             return _this;
         }
         Emitter.prototype.onNewParicleEmit = function (newParticle) {
+            newParticle.velocity = new THREE.Vector3(0, 0, 0.5 * Math.random());
         };
         Emitter.prototype.onExistingParicleEmit = function (existingParticle) {
+            existingParticle.velocity = new THREE.Vector3(0, 0, Math.random());
         };
         Emitter.prototype.emitParticle = function (existingParticle) {
             var particleToEmit;
@@ -45,7 +47,6 @@ var Kotletkas;
             }
             else {
                 particleToEmit = new Kotletkas.Particle(this.particleParams.geometry, this.particleParams.material);
-                particleToEmit.velocity = new THREE.Vector3(0, 0, 0.5 * Math.random());
                 this.onNewParicleEmit(particleToEmit);
             }
             particleToEmit.position.set(this.position.x, this.position.y, this.position.z);
@@ -69,6 +70,7 @@ var Kotletkas;
                 this.scene.add(newParticle);
                 this.particles.push(newParticle);
             }
+            this.particleLifeSpan = config.emitter.particleParams.lifespan;
             for (var i = config.forceFields.length - 1; i >= 0; i--) {
             }
         }
@@ -81,11 +83,19 @@ var Kotletkas;
                     throw new Error('Unknown Emitter role!');
                     break;
             }
+            this.emitter.position.set(e.position.x, e.position.y, e.position.z);
             this.scene.add(this.emitter);
         };
         Sandbox.prototype.prepareToRender = function () {
             for (var i = this.particles.length - 1; i >= 0; i--) {
-                this.particles[i].position.add(this.particles[i].velocity);
+                var particle = this.particles[i];
+                particle.position.add(particle.velocity);
+                particle.framesAlive++;
+                if (particle.position.distanceTo(this.emitter.position) > 20 ||
+                    particle.framesAlive > this.particleLifeSpan) {
+                    particle.framesAlive = 0;
+                    this.emitter.emitParticle(particle);
+                }
             }
         };
         return Sandbox;
@@ -94,7 +104,7 @@ var Kotletkas;
 })(Kotletkas || (Kotletkas = {}));
 ;
 (function ($3, windowWidth, windowHeight) {
-    var camera = new $3.PerspectiveCamera(80, windowWidth / windowHeight);
+    var camera = new $3.PerspectiveCamera(100, windowWidth / windowHeight);
     camera.position.set(30, 10, 30);
     var renderer = new $3.WebGLRenderer({ antialias: true });
     renderer.setSize(windowWidth, windowHeight);
