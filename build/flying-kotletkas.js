@@ -14,8 +14,8 @@ var Kotletkas;
     var Particle = (function (_super) {
         __extends(Particle, _super);
         function Particle(geometry, material, velocity) {
+            if (velocity === void 0) { velocity = new THREE.Vector3(0, 0, 0); }
             var _this = _super.call(this, geometry, material) || this;
-            _this.velocity = new THREE.Vector3(0, 0, 0);
             _this.framesAlive = 0;
             _this.velocity = velocity;
             return _this;
@@ -33,6 +33,27 @@ var Kotletkas;
             _this.particleParams = particleParams;
             return _this;
         }
+        Emitter.prototype.onNewParicleEmit = function (newParticle) {
+        };
+        Emitter.prototype.onExistingParicleEmit = function (existingParticle) {
+        };
+        Emitter.prototype.emitParticle = function (existingParticle, prepare) {
+            var particleToEmit;
+            if (existingParticle) {
+                particleToEmit = existingParticle;
+                this.onExistingParicleEmit(particleToEmit);
+            }
+            else {
+                particleToEmit = new Kotletkas.Particle(this.particleParams.geometry, this.particleParams.material);
+                particleToEmit.velocity = new THREE.Vector3(0, 0, 0.5);
+                this.onNewParicleEmit(particleToEmit);
+            }
+            particleToEmit.position.set(this.position.x, this.position.y, this.position.z);
+            if (prepare) {
+                return prepare(particleToEmit);
+            }
+            return particleToEmit;
+        };
         return Emitter;
     }(THREE.Mesh));
     Kotletkas.Emitter = Emitter;

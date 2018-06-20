@@ -2,7 +2,7 @@ declare namespace Kotletkas {
     class Particle extends THREE.Mesh {
         velocity: THREE.Vector3;
         framesAlive: number;
-        constructor(geometry: THREE.Geometry, material: THREE.Material, velocity: THREE.Vector3);
+        constructor(geometry: THREE.Geometry, material: THREE.Material, velocity?: THREE.Vector3);
     }
 }
 declare namespace Kotletkas {
@@ -16,6 +16,9 @@ declare namespace Kotletkas {
 declare namespace Kotletkas {
     class Emitter extends THREE.Mesh {
         particleParams: IParticleParams;
+        onNewParicleEmit(newParticle: Particle): void;
+        onExistingParicleEmit(existingParticle: Particle): void;
+        emitParticle(existingParticle?: Particle, prepare?: (particle: Particle) => Particle): Particle;
         constructor(geometry: THREE.Geometry | THREE.BufferGeometry, material: THREE.Material, particleParams: IParticleParams);
     }
 }
