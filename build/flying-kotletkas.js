@@ -60,9 +60,10 @@ var Kotletkas;
 (function (Kotletkas) {
     var Sandbox = (function () {
         function Sandbox(config) {
-            this.statics = [];
+            this.forces = [];
             this.particles = [];
             this.scene = config.scene;
+            this.systemRadius = config.systemRadius;
             this.createEmitter(config.emitter);
             var newParticle;
             for (var i = 0; i < config.emitter.particleParams.count; ++i) {
@@ -91,7 +92,7 @@ var Kotletkas;
                 var particle = this.particles[i];
                 particle.position.add(particle.velocity);
                 particle.framesAlive++;
-                if (particle.position.distanceTo(this.emitter.position) > 20 ||
+                if (particle.position.distanceTo(this.emitter.position) > this.systemRadius ||
                     particle.framesAlive > this.particleLifeSpan) {
                     particle.framesAlive = 0;
                     this.emitter.emitParticle(particle);
@@ -114,11 +115,12 @@ var Kotletkas;
     camera.lookAt(scene.position);
     var k = new Kotletkas.Sandbox({
         scene: scene,
+        systemRadius: 20,
         emitter: {
             name: 'mainEmitter',
             role: 'basic-emitter',
             position: { x: 0, y: 0, z: 0 },
-            geometry: new $3.PlaneBufferGeometry(5, 5),
+            geometry: new $3.PlaneGeometry(5, 5),
             material: new $3.MeshNormalMaterial(),
             particleParams: {
                 geometry: new THREE.CubeGeometry(0.5, 0.5, 0.5),
@@ -132,7 +134,7 @@ var Kotletkas;
                 role: 'anti-attractor',
                 position: { x: 0, y: 0, z: 15 },
                 strength: 1,
-                geometry: new $3.ConeBufferGeometry(2, 5, 16, 32),
+                geometry: new $3.ConeGeometry(2, 5, 16, 32),
                 material: new $3.MeshNormalMaterial()
             }]
     });

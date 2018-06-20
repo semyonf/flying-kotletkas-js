@@ -48,6 +48,7 @@ declare namespace Kotletkas {
 declare namespace Kotletkas {
     interface ISandboxConfig {
         scene: THREE.Scene;
+        systemRadius: number;
         emitter: IEmitterConfigItem;
         forceFields: Array<IForceFieldConfigItem>;
     }
@@ -55,9 +56,10 @@ declare namespace Kotletkas {
 declare namespace Kotletkas {
     class Sandbox {
         private scene;
+        private systemRadius;
         private emitter;
         private particleLifeSpan;
-        private statics;
+        private forces;
         private particles;
         private createEmitter;
         prepareToRender(): void;

@@ -8,9 +8,10 @@
 namespace Kotletkas {
   export class Sandbox {
     private scene: THREE.Scene;
+    private systemRadius: number;
     private emitter: Emitter;
     private particleLifeSpan: number;
-    private statics: Array<THREE.Mesh> = [];
+    private forces: Array<THREE.Mesh> = [];
     private particles: Array<Particle> = [];
 
     private createEmitter(e: IEmitterConfigItem): void {
@@ -40,7 +41,7 @@ namespace Kotletkas {
         particle.position.add(particle.velocity);
         particle.framesAlive++;
         if (
-          particle.position.distanceTo(this.emitter.position) > 20 ||
+          particle.position.distanceTo(this.emitter.position) > this.systemRadius ||
           particle.framesAlive > this.particleLifeSpan
         ) {
           particle.framesAlive = 0;
@@ -53,6 +54,7 @@ namespace Kotletkas {
 
     constructor(config: ISandboxConfig) {
       this.scene = config.scene;
+      this.systemRadius = config.systemRadius;
       this.createEmitter(config.emitter);
 
       let newParticle: Particle;

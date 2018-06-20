@@ -4,6 +4,7 @@
 namespace Kotletkas {
   export interface ISandboxConfig {
     scene: THREE.Scene;
+    systemRadius: number;
     emitter: IEmitterConfigItem;
     forceFields: Array<IForceFieldConfigItem>;
   }
