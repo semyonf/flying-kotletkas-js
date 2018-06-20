@@ -18,7 +18,7 @@ declare namespace Kotletkas {
         particleParams: IParticleParams;
         onNewParicleEmit(newParticle: Particle): void;
         onExistingParicleEmit(existingParticle: Particle): void;
-        emitParticle(existingParticle?: Particle, prepare?: (particle: Particle) => Particle): Particle;
+        emitParticle(existingParticle?: Particle): Particle;
         constructor(geometry: THREE.Geometry | THREE.BufferGeometry, material: THREE.Material, particleParams: IParticleParams);
     }
 }
@@ -47,9 +47,7 @@ declare namespace Kotletkas {
 }
 declare namespace Kotletkas {
     interface ISandboxConfig {
-        camera: THREE.Camera;
-        renderer: THREE.Renderer;
-        trails: boolean;
+        scene: THREE.Scene;
         emitter: IEmitterConfigItem;
         forceFields: Array<IForceFieldConfigItem>;
     }
@@ -57,13 +55,11 @@ declare namespace Kotletkas {
 declare namespace Kotletkas {
     class Sandbox {
         private scene;
-        private camera;
-        private renderer;
         private emitter;
-        private trails;
         private statics;
         private particles;
         private createEmitter;
+        prepareToRender(): void;
         constructor(config: ISandboxConfig);
     }
 }

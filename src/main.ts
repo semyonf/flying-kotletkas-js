@@ -9,20 +9,21 @@
   renderer.setPixelRatio(window.devicePixelRatio);
   document.body.appendChild(renderer.domElement);
 
-  new Kotletkas.Sandbox({
-    camera,
-    renderer,
-    trails: false,
+  const scene = new $3.Scene();
+  camera.lookAt(scene.position);
+
+  const k = new Kotletkas.Sandbox({
+    scene,
     emitter: {
       name: 'mainEmitter',
       role: 'basic-emitter',
       position: {x: 0, y: 0, z: 0},
-      geometry: new $3.PlaneBufferGeometry(15, 15),
+      geometry: new $3.PlaneBufferGeometry(5, 5),
       material: new $3.MeshNormalMaterial(),
       particleParams: {
-        geometry: new THREE.Geometry(),
-        material: new THREE.Material(),
-        count: 100,
+        geometry: new THREE.CubeGeometry(0.5, 0.5, 0.5),
+        material: new THREE.MeshBasicMaterial(),
+        count: 5,
         lifespan: 180
       }
     },
@@ -35,4 +36,10 @@
       material: new $3.MeshNormalMaterial()
     }]
   });
+
+  (function animate() {
+    k.prepareToRender();
+    renderer.render(scene, camera);
+    requestAnimationFrame(animate);
+  })();
 })(THREE, window.innerWidth, window.innerHeight);

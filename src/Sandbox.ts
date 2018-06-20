@@ -7,15 +7,12 @@
 
 namespace Kotletkas {
   export class Sandbox {
-    private scene: THREE.Scene = new THREE.Scene();
-    private camera: THREE.Camera;
-    private renderer: THREE.Renderer;
+    private scene: THREE.Scene;
     private emitter: Emitter;
-    private trails: boolean = false;
-    private statics: Array<THREE.Mesh>;
-    private particles: Array<Particle>;
+    private statics: Array<THREE.Mesh> = [];
+    private particles: Array<Particle> = [];
 
-    private createEmitter(e: IEmitterConfigItem) {
+    private createEmitter(e: IEmitterConfigItem): void {
       switch (e.role) {
         case "basic-emitter":
           this.emitter = new Emitter(
@@ -33,19 +30,27 @@ namespace Kotletkas {
       this.scene.add(this.emitter);
     }
 
-    constructor(config: ISandboxConfig) {
-      this.camera = config.camera;
-      this.camera.lookAt(this.scene.position);
-      this.renderer = config.renderer;
-      this.trails = config.trails;
+    public prepareToRender(): void {
+      for (var i = this.particles.length - 1; i >= 0; i--) {
+        // every forcefield should affect every particle here
+        this.particles[i].position.add(this.particles[i].velocity);
+      }
+    }
 
+    constructor(config: ISandboxConfig) {
+      this.scene = config.scene;
       this.createEmitter(config.emitter);
+
+      let newParticle: Particle;
+      for (var i = 0; i < config.emitter.particleParams.count; ++i) {
+        newParticle = this.emitter.emitParticle();
+        this.scene.add(newParticle);
+        this.particles.push(newParticle);
+      }
 
       for (var i = config.forceFields.length - 1; i >= 0; i--) {
         // this.createForceField(config.forceFields[i]);
       }
-
-      this.renderer.render(this.scene, this.camera);
     }
   }
 }

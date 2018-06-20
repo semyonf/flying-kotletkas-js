@@ -37,7 +37,7 @@ var Kotletkas;
         };
         Emitter.prototype.onExistingParicleEmit = function (existingParticle) {
         };
-        Emitter.prototype.emitParticle = function (existingParticle, prepare) {
+        Emitter.prototype.emitParticle = function (existingParticle) {
             var particleToEmit;
             if (existingParticle) {
                 particleToEmit = existingParticle;
@@ -45,13 +45,10 @@ var Kotletkas;
             }
             else {
                 particleToEmit = new Kotletkas.Particle(this.particleParams.geometry, this.particleParams.material);
-                particleToEmit.velocity = new THREE.Vector3(0, 0, 0.5);
+                particleToEmit.velocity = new THREE.Vector3(0, 0, 0.5 * Math.random());
                 this.onNewParicleEmit(particleToEmit);
             }
             particleToEmit.position.set(this.position.x, this.position.y, this.position.z);
-            if (prepare) {
-                return prepare(particleToEmit);
-            }
             return particleToEmit;
         };
         return Emitter;
@@ -62,16 +59,18 @@ var Kotletkas;
 (function (Kotletkas) {
     var Sandbox = (function () {
         function Sandbox(config) {
-            this.scene = new THREE.Scene();
-            this.trails = false;
-            this.camera = config.camera;
-            this.camera.lookAt(this.scene.position);
-            this.renderer = config.renderer;
-            this.trails = config.trails;
+            this.statics = [];
+            this.particles = [];
+            this.scene = config.scene;
             this.createEmitter(config.emitter);
+            var newParticle;
+            for (var i = 0; i < config.emitter.particleParams.count; ++i) {
+                newParticle = this.emitter.emitParticle();
+                this.scene.add(newParticle);
+                this.particles.push(newParticle);
+            }
             for (var i = config.forceFields.length - 1; i >= 0; i--) {
             }
-            this.renderer.render(this.scene, this.camera);
         }
         Sandbox.prototype.createEmitter = function (e) {
             switch (e.role) {
@@ -83,6 +82,11 @@ var Kotletkas;
                     break;
             }
             this.scene.add(this.emitter);
+        };
+        Sandbox.prototype.prepareToRender = function () {
+            for (var i = this.particles.length - 1; i >= 0; i--) {
+                this.particles[i].position.add(this.particles[i].velocity);
+            }
         };
         return Sandbox;
     }());
@@ -96,20 +100,20 @@ var Kotletkas;
     renderer.setSize(windowWidth, windowHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
     document.body.appendChild(renderer.domElement);
-    new Kotletkas.Sandbox({
-        camera: camera,
-        renderer: renderer,
-        trails: false,
+    var scene = new $3.Scene();
+    camera.lookAt(scene.position);
+    var k = new Kotletkas.Sandbox({
+        scene: scene,
         emitter: {
             name: 'mainEmitter',
             role: 'basic-emitter',
             position: { x: 0, y: 0, z: 0 },
-            geometry: new $3.PlaneBufferGeometry(15, 15),
+            geometry: new $3.PlaneBufferGeometry(5, 5),
             material: new $3.MeshNormalMaterial(),
             particleParams: {
-                geometry: new THREE.Geometry(),
-                material: new THREE.Material(),
-                count: 100,
+                geometry: new THREE.CubeGeometry(0.5, 0.5, 0.5),
+                material: new THREE.MeshBasicMaterial(),
+                count: 5,
                 lifespan: 180
             }
         },
@@ -122,5 +126,10 @@ var Kotletkas;
                 material: new $3.MeshNormalMaterial()
             }]
     });
+    (function animate() {
+        k.prepareToRender();
+        renderer.render(scene, camera);
+        requestAnimationFrame(animate);
+    })();
 })(THREE, window.innerWidth, window.innerHeight);
 //# sourceMappingURL=flying-kotletkas.js.map

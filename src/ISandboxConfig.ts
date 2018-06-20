@@ -3,9 +3,7 @@
 
 namespace Kotletkas {
   export interface ISandboxConfig {
-    camera: THREE.Camera;
-    renderer: THREE.Renderer;
-    trails: boolean;
+    scene: THREE.Scene;
     emitter: IEmitterConfigItem;
     forceFields: Array<IForceFieldConfigItem>;
   }

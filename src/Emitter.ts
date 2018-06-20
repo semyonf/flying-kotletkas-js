@@ -13,7 +13,7 @@ namespace Kotletkas {
 
     }
 
-    emitParticle(existingParticle?: Particle, prepare?: (particle: Particle) => Particle) {
+    emitParticle(existingParticle?: Particle) {
       let particleToEmit: Particle;
 
       if (existingParticle) {
@@ -24,17 +24,13 @@ namespace Kotletkas {
           this.particleParams.geometry,
           this.particleParams.material
         );
-        particleToEmit.velocity = new THREE.Vector3(0, 0, 0.5);
+        particleToEmit.velocity = new THREE.Vector3(0, 0, 0.5 * Math.random());
         this.onNewParicleEmit(particleToEmit);
       }
 
       particleToEmit.position.set(
         this.position.x, this.position.y, this.position.z
       );
-
-      if (prepare) {
-        return prepare(particleToEmit);
-      }
 
       return particleToEmit;
     }
