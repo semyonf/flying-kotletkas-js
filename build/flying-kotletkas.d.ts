@@ -2,7 +2,7 @@ declare namespace Kotletkas {
     class Particle extends THREE.Mesh {
         velocity: THREE.Vector3;
         framesAlive: number;
-        constructor(geometry: THREE.Geometry, material: THREE.Material, velocity?: THREE.Vector3);
+        constructor(geometry: THREE.Geometry, material: THREE.Material, velocity: THREE.Vector3);
     }
 }
 declare namespace Kotletkas {
