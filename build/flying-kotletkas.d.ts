@@ -41,6 +41,12 @@ declare namespace Kotletkas {
     }
 }
 declare namespace Kotletkas {
+    interface IForce {
+        strength: number;
+        affectParticle(particle: Particle): void;
+    }
+}
+declare namespace Kotletkas {
     interface IForceFieldConfigItem extends IConfigItem {
         strength: number;
     }
@@ -51,6 +57,13 @@ declare namespace Kotletkas {
         systemRadius: number;
         emitter: IEmitterConfigItem;
         forceFields: Array<IForceFieldConfigItem>;
+    }
+}
+declare namespace Kotletkas {
+    class SlowingForce implements IForce {
+        strength: number;
+        affectParticle(particle: Particle): void;
+        constructor();
     }
 }
 declare namespace Kotletkas {

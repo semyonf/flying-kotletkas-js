@@ -1,7 +1,7 @@
 /// <reference path="Sandbox.ts" />
 
 ;(function($3, windowWidth, windowHeight) {
-  const camera = new $3.PerspectiveCamera(100, windowWidth / windowHeight);
+  const camera = new $3.PerspectiveCamera(80, windowWidth / windowHeight);
   camera.position.set(30, 10, 30);
 
   const renderer = new $3.WebGLRenderer({antialias: true});
@@ -14,7 +14,7 @@
 
   const k = new Kotletkas.Sandbox({
     scene,
-    systemRadius: 20,
+    systemRadius: 50,
     emitter: {
       name: 'mainEmitter',
       role: 'basic-emitter',

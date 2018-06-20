@@ -58,6 +58,19 @@ var Kotletkas;
 })(Kotletkas || (Kotletkas = {}));
 var Kotletkas;
 (function (Kotletkas) {
+    var SlowingForce = (function () {
+        function SlowingForce() {
+            this.strength = 1;
+        }
+        SlowingForce.prototype.affectParticle = function (particle) {
+            particle.velocity.divideScalar(1 + (0.005 * this.strength));
+        };
+        return SlowingForce;
+    }());
+    Kotletkas.SlowingForce = SlowingForce;
+})(Kotletkas || (Kotletkas = {}));
+var Kotletkas;
+(function (Kotletkas) {
     var Sandbox = (function () {
         function Sandbox(config) {
             this.forces = [];
@@ -72,6 +85,7 @@ var Kotletkas;
                 this.particles.push(newParticle);
             }
             this.particleLifeSpan = config.emitter.particleParams.lifespan;
+            this.forces.push(new Kotletkas.SlowingForce());
             for (var i = config.forceFields.length - 1; i >= 0; i--) {
             }
         }
@@ -97,6 +111,10 @@ var Kotletkas;
                     particle.framesAlive = 0;
                     this.emitter.emitParticle(particle);
                 }
+                for (var j = this.forces.length - 1; j >= 0; j--) {
+                    var force = this.forces[j];
+                    force.affectParticle(particle);
+                }
             }
         };
         return Sandbox;
@@ -105,7 +123,7 @@ var Kotletkas;
 })(Kotletkas || (Kotletkas = {}));
 ;
 (function ($3, windowWidth, windowHeight) {
-    var camera = new $3.PerspectiveCamera(100, windowWidth / windowHeight);
+    var camera = new $3.PerspectiveCamera(80, windowWidth / windowHeight);
     camera.position.set(30, 10, 30);
     var renderer = new $3.WebGLRenderer({ antialias: true });
     renderer.setSize(windowWidth, windowHeight);
@@ -115,7 +133,7 @@ var Kotletkas;
     camera.lookAt(scene.position);
     var k = new Kotletkas.Sandbox({
         scene: scene,
-        systemRadius: 20,
+        systemRadius: 50,
         emitter: {
             name: 'mainEmitter',
             role: 'basic-emitter',

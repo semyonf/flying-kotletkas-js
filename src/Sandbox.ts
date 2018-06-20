@@ -4,6 +4,8 @@
 /// <reference path="IEmitterConfigItem.ts" />
 /// <reference path="IForceFieldConfigItem.ts" />
 /// <reference path="ISandboxConfig.ts" />
+/// <reference path="IForce.ts" />
+/// <reference path="SlowingForce.ts" />
 
 namespace Kotletkas {
   export class Sandbox {
@@ -11,7 +13,7 @@ namespace Kotletkas {
     private systemRadius: number;
     private emitter: Emitter;
     private particleLifeSpan: number;
-    private forces: Array<THREE.Mesh> = [];
+    private forces: Array<IForce> = [];
     private particles: Array<Particle> = [];
 
     private createEmitter(e: IEmitterConfigItem): void {
@@ -48,7 +50,10 @@ namespace Kotletkas {
           this.emitter.emitParticle(particle);
         }
 
-        // every forcefield should affect every particle here
+        for (var j = this.forces.length - 1; j >= 0; j--) {
+          const force: IForce = this.forces[j];
+          force.affectParticle(particle);
+        }
       }
     }
 
@@ -64,6 +69,8 @@ namespace Kotletkas {
         this.particles.push(newParticle);
       }
       this.particleLifeSpan = config.emitter.particleParams.lifespan;
+
+      this.forces.push(new SlowingForce());
 
       for (var i = config.forceFields.length - 1; i >= 0; i--) {
         // this.createForceField(config.forceFields[i]);
