@@ -21,22 +21,28 @@ declare namespace Kotletkas {
 }
 declare namespace Kotletkas {
     interface IConfigItem {
-        name?: string;
         role: string;
+        geometry: THREE.Geometry | THREE.BufferGeometry;
+        material: THREE.Material;
+        name?: string;
         position?: {
             x: number;
             y: number;
             z: number;
         };
-        geometry: THREE.Geometry | THREE.BufferGeometry;
-        material: THREE.Material;
     }
+}
+declare namespace Kotletkas {
     interface IEmitterConfigItem extends IConfigItem {
         particleParams: IParticleParams;
     }
+}
+declare namespace Kotletkas {
     interface IForceFieldConfigItem extends IConfigItem {
         strength: number;
     }
+}
+declare namespace Kotletkas {
     interface ISandboxConfig {
         camera: THREE.Camera;
         renderer: THREE.Renderer;
@@ -44,6 +50,8 @@ declare namespace Kotletkas {
         emitter: IEmitterConfigItem;
         forceFields: Array<IForceFieldConfigItem>;
     }
+}
+declare namespace Kotletkas {
     class Sandbox {
         private scene;
         private camera;

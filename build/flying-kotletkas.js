@@ -48,6 +48,8 @@ var Kotletkas;
             this.renderer = config.renderer;
             this.trails = config.trails;
             this.createEmitter(config.emitter);
+            for (var i = config.forceFields.length - 1; i >= 0; i--) {
+            }
             this.renderer.render(this.scene, this.camera);
         }
         Sandbox.prototype.createEmitter = function (e) {
@@ -65,4 +67,39 @@ var Kotletkas;
     }());
     Kotletkas.Sandbox = Sandbox;
 })(Kotletkas || (Kotletkas = {}));
+;
+(function ($3, windowWidth, windowHeight) {
+    var camera = new $3.PerspectiveCamera(80, windowWidth / windowHeight);
+    camera.position.set(30, 10, 30);
+    var renderer = new $3.WebGLRenderer({ antialias: true });
+    renderer.setSize(windowWidth, windowHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    document.body.appendChild(renderer.domElement);
+    new Kotletkas.Sandbox({
+        camera: camera,
+        renderer: renderer,
+        trails: false,
+        emitter: {
+            name: 'mainEmitter',
+            role: 'basic-emitter',
+            position: { x: 0, y: 0, z: 0 },
+            geometry: new $3.PlaneBufferGeometry(15, 15),
+            material: new $3.MeshNormalMaterial(),
+            particleParams: {
+                geometry: new THREE.Geometry(),
+                material: new THREE.Material(),
+                count: 100,
+                lifespan: 180
+            }
+        },
+        forceFields: [{
+                name: 'cone',
+                role: 'anti-attractor',
+                position: { x: 0, y: 0, z: 15 },
+                strength: 1,
+                geometry: new $3.ConeBufferGeometry(2, 5, 16, 32),
+                material: new $3.MeshNormalMaterial()
+            }]
+    });
+})(THREE, window.innerWidth, window.innerHeight);
 //# sourceMappingURL=flying-kotletkas.js.map
