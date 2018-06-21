@@ -29,6 +29,7 @@ declare namespace Kotletkas {
 declare namespace Kotletkas {
     class Emitter extends THREE.Mesh {
         particleParams: IParticleParams;
+        getInitialVelocity(): THREE.Vector3;
         onNewParticleEmit(newParticle: Particle): void;
         onExistingParticleEmit(existingParticle: Particle): void;
         init(): void;
@@ -60,5 +61,10 @@ declare namespace Kotletkas {
         private particles;
         prepareToRender(): void;
         constructor(config: ISandboxConfig);
+    }
+}
+declare namespace Kotletkas {
+    class VariableAngleEmitter extends Emitter {
+        getInitialVelocity(): THREE.Vector3;
     }
 }

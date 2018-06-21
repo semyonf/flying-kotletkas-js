@@ -56,9 +56,15 @@ var Kotletkas;
             _this.particleParams = particleParams;
             return _this;
         }
-        Emitter.prototype.onNewParticleEmit = function (newParticle) { };
+        Emitter.prototype.getInitialVelocity = function () {
+            return new THREE.Vector3(0, 0, Math.random());
+        };
+        Emitter.prototype.onNewParticleEmit = function (newParticle) {
+        };
         ;
-        Emitter.prototype.onExistingParticleEmit = function (existingParticle) { };
+        Emitter.prototype.onExistingParticleEmit = function (existingParticle) {
+        };
+        ;
         Emitter.prototype.init = function () {
             for (var i = this.particleParams.count; i > 0; i--) {
                 this.emitParticle();
@@ -74,7 +80,7 @@ var Kotletkas;
                 particleToEmit = new Kotletkas.Particle(this.particleParams.geometry, this.particleParams.material);
                 this.onNewParticleEmit(particleToEmit);
             }
-            particleToEmit.velocity = new THREE.Vector3(0, 0, Math.random());
+            particleToEmit.velocity = this.getInitialVelocity();
             particleToEmit.position.set(this.position.x, this.position.y, this.position.z);
             return particleToEmit;
         };
@@ -133,6 +139,20 @@ var Kotletkas;
     }());
     Kotletkas.Sandbox = Sandbox;
 })(Kotletkas || (Kotletkas = {}));
+var Kotletkas;
+(function (Kotletkas) {
+    var VariableAngleEmitter = (function (_super) {
+        __extends(VariableAngleEmitter, _super);
+        function VariableAngleEmitter() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        VariableAngleEmitter.prototype.getInitialVelocity = function () {
+            return new THREE.Vector3(Math.random() / 10 - 0.035, Math.random() / 10 - 0.035, 0.5);
+        };
+        return VariableAngleEmitter;
+    }(Kotletkas.Emitter));
+    Kotletkas.VariableAngleEmitter = VariableAngleEmitter;
+})(Kotletkas || (Kotletkas = {}));
 ;
 (function ($3, windowWidth, windowHeight) {
     var camera = new $3.PerspectiveCamera(80, windowWidth / windowHeight);
@@ -143,20 +163,20 @@ var Kotletkas;
     document.body.appendChild(renderer.domElement);
     var scene = new $3.Scene();
     camera.lookAt(scene.position);
-    var emitter = new Kotletkas.Emitter(new THREE.PlaneGeometry(10, 10), new THREE.MeshBasicMaterial(), {
-        count: 10,
+    var emitter = new Kotletkas.VariableAngleEmitter(new THREE.PlaneGeometry(5, 5), new THREE.MeshBasicMaterial(), {
+        count: 100,
         lifespan: 180,
         geometry: new THREE.BoxBufferGeometry(0.5, 0.5, 0.5),
         material: new THREE.MeshNormalMaterial()
     });
     scene.add(emitter);
     var antiAttractor = new Kotletkas.AntiAttractor(new $3.ConeBufferGeometry(2, 5, 16, 32), new $3.MeshNormalMaterial());
-    antiAttractor.position.set(0, 0, 20);
+    antiAttractor.position.set(0, 0, 15);
     scene.add(antiAttractor);
     var kotletkasConfig = {
         scene: scene,
         emitter: emitter,
-        radius: 30,
+        radius: 20,
         behaviors: [{
                 affectParticle: function (particle) {
                 }

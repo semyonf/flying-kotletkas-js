@@ -48,7 +48,7 @@
 // //   document.body.appendChild(renderer.domElement);
 
 // //   const
-// //     emitter = new Kotletkas.Emitter(scene, new $3.Mesh(
+// //     emitter = new Kotletkas.BasicEmitter(scene, new $3.Mesh(
 // //       new $3.PlaneGeometry(0.1, 0.1),
 // //       new $3.MeshBasicMaterial({
 // //         color: 0xffffff

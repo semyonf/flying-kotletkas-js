@@ -10,11 +10,12 @@
   const scene = new $3.Scene();
   camera.lookAt(scene.position);
 
-  const emitter = new Kotletkas.Emitter(
-    new THREE.PlaneGeometry(10,10),
+
+  const emitter = new Kotletkas.VariableAngleEmitter(
+    new THREE.PlaneGeometry(5,5),
     new THREE.MeshBasicMaterial(),
     {
-      count: 10,
+      count: 100,
       lifespan: 180,
       geometry: new THREE.BoxBufferGeometry(0.5, 0.5, 0.5),
       material: new THREE.MeshNormalMaterial()
@@ -26,13 +27,13 @@
     new $3.ConeBufferGeometry(2, 5, 16, 32),
     new $3.MeshNormalMaterial()
   );
-  antiAttractor.position.set(0, 0, 20);
+  antiAttractor.position.set(0, 0, 15);
   scene.add(antiAttractor);
 
   const kotletkasConfig = {
     scene,
     emitter,
-    radius: 30,
+    radius: 20,
     behaviors: [{
       affectParticle: function (particle: Kotletkas.Particle) {
 
@@ -40,8 +41,7 @@
     },
       new Kotletkas.SlowingBehavior(3),
       antiAttractor
-    ],
-    // forces: []
+    ]
   };
 
   const k = new Kotletkas.Sandbox(kotletkasConfig);

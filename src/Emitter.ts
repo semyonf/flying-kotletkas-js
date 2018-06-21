@@ -1,13 +1,19 @@
-/// <reference path="Particle.ts" />
-/// <reference path="IParticleParams.ts"/>
+///<reference path="Particle.ts"/>
+///<reference path="IParticleParams.ts"/>
 
 namespace Kotletkas {
   export class Emitter extends THREE.Mesh {
     public particleParams: IParticleParams;
 
-    public onNewParticleEmit(newParticle: Particle) {};
+    getInitialVelocity(): THREE.Vector3 {
+      return new THREE.Vector3(0, 0, Math.random());
+    }
 
-    public onExistingParticleEmit(existingParticle: Particle) {}
+    onNewParticleEmit(newParticle: Particle) {
+    };
+
+    onExistingParticleEmit(existingParticle: Particle) {
+    };
 
     init() {
       for (let i = this.particleParams.count; i > 0; i--) {
@@ -29,7 +35,7 @@ namespace Kotletkas {
         this.onNewParticleEmit(particleToEmit);
       }
 
-      particleToEmit.velocity = new THREE.Vector3(0, 0, Math.random());
+      particleToEmit.velocity = this.getInitialVelocity();
       particleToEmit.position.set(
         this.position.x, this.position.y, this.position.z
       );
