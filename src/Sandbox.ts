@@ -1,5 +1,5 @@
 /// <reference path="Emitter.ts"/>
-/// <reference path="SlowingBehavior.ts"/>
+/// <reference path="AccelerationBehavior.ts"/>
 /// <reference path="IParticleParams.ts"/>
 /// <reference path="ISandboxConfig.ts"/>
 

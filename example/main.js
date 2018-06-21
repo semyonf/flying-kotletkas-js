@@ -10,7 +10,6 @@
   const scene = new $3.Scene();
   camera.lookAt(scene.position);
 
-
   const emitter = new Kotletkas.VariableAngleEmitter(
     new THREE.PlaneGeometry(5,5),
     new THREE.MeshBasicMaterial(),
@@ -46,7 +45,7 @@
 
       }
     },
-      new Kotletkas.SlowingBehavior(2),
+      new Kotletkas.AccelerationBehavior(-2),
       antiAttractor,
       attractor
     ]

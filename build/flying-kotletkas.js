@@ -26,6 +26,20 @@ var Kotletkas;
 })(Kotletkas || (Kotletkas = {}));
 var Kotletkas;
 (function (Kotletkas) {
+    var AccelerationBehavior = (function () {
+        function AccelerationBehavior(strength) {
+            this.strength = 1;
+            this.strength = strength;
+        }
+        AccelerationBehavior.prototype.affectParticle = function (particle) {
+            particle.velocity.divideScalar(1 + (0.005 * -this.strength));
+        };
+        return AccelerationBehavior;
+    }());
+    Kotletkas.AccelerationBehavior = AccelerationBehavior;
+})(Kotletkas || (Kotletkas = {}));
+var Kotletkas;
+(function (Kotletkas) {
     var AntiAttractor = (function (_super) {
         __extends(AntiAttractor, _super);
         function AntiAttractor(geometry, material, strength) {
@@ -109,20 +123,6 @@ var Kotletkas;
         return Emitter;
     }(THREE.Mesh));
     Kotletkas.Emitter = Emitter;
-})(Kotletkas || (Kotletkas = {}));
-var Kotletkas;
-(function (Kotletkas) {
-    var SlowingBehavior = (function () {
-        function SlowingBehavior(strength) {
-            this.strength = 1;
-            this.strength = strength;
-        }
-        SlowingBehavior.prototype.affectParticle = function (particle) {
-            particle.velocity.divideScalar(1 + (0.005 * this.strength));
-        };
-        return SlowingBehavior;
-    }());
-    Kotletkas.SlowingBehavior = SlowingBehavior;
 })(Kotletkas || (Kotletkas = {}));
 var Kotletkas;
 (function (Kotletkas) {

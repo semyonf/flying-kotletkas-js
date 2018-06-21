@@ -12,6 +12,13 @@ declare namespace Kotletkas {
     }
 }
 declare namespace Kotletkas {
+    class AccelerationBehavior implements IParticleBehavior {
+        strength: number;
+        affectParticle(particle: Particle): void;
+        constructor(strength: number);
+    }
+}
+declare namespace Kotletkas {
     class AntiAttractor extends THREE.Mesh implements IParticleBehavior {
         strength: number;
         affectParticle(particle: Kotletkas.Particle): void;
@@ -50,13 +57,6 @@ declare namespace Kotletkas {
         emitter: Emitter;
         radius: number;
         behaviors: Array<IParticleBehavior>;
-    }
-}
-declare namespace Kotletkas {
-    class SlowingBehavior implements IParticleBehavior {
-        strength: number;
-        affectParticle(particle: Particle): void;
-        constructor(strength: number);
     }
 }
 declare namespace Kotletkas {
