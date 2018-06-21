@@ -1,99 +1,62 @@
-// ;(function($3, windowWidth, windowHeight, undefined) { 'use strict';
-//   const camera = new $3.PerspectiveCamera(80, windowWidth / windowHeight);
-//   camera.position.set(30, 10, 30);
+;(function ($3, windowWidth, windowHeight) {
+  const camera = new $3.PerspectiveCamera(80, windowWidth / windowHeight);
+  camera.position.set(30, 10, 30);
 
-//   const renderer = new $3.WebGLRenderer({antialias: true});
-//   renderer.setSize(windowWidth, windowHeight);
-//   renderer.setPixelRatio(window.devicePixelRatio);
-//   document.body.appendChild(renderer.domElement);
+  const renderer = new $3.WebGLRenderer({antialias: true});
+  renderer.setSize(windowWidth, windowHeight);
+  renderer.setPixelRatio(window.devicePixelRatio);
+  document.body.appendChild(renderer.domElement);
 
-//   new Kotletkas.Sandbox({
-//     camera,
-//     renderer,
-//     trails: false,
-//     emitter: {
-//       name: 'mainEmitter',
-//       role: 'basic-emitter',
-//       geometry: new THREE.PlaneGeometry(10, 10),
-//       material: new THREE.MeshNormalMaterial(),
-//       particleParams: {
-//         geometry: new $3.Geometry(),
-//         material: new $3.Material(),
-//         count: 100,
-//         lifespan: 180
-//       }
-//     },
-//     forces: [{
-//       name: 'cone',
-//       role: 'anti-attractor',
-//       position: {x: 0, y: 0, z: 15},
-//       strength: 1,
-//       geometry: new $3.ConeGeometry(2, 5, 16, 32),
-//       material: new $3.MeshNormalMaterial()
-//     }]
-//   });
-// })(THREE, window.innerWidth, window.innerHeight);
+  const scene = new $3.Scene();
+  camera.lookAt(scene.position);
 
 
-// // ;(function($3, windowWidth, windowHeight, undefined) { 'use strict';
-// //   const scene = new $3.Scene();
+  const emitter = new Kotletkas.VariableAngleEmitter(
+    new THREE.PlaneGeometry(5,5),
+    new THREE.MeshBasicMaterial(),
+    {
+      count: 100,
+      lifespan: 180,
+      geometry: new THREE.BoxBufferGeometry(0.5, 0.5, 0.5),
+      material: new THREE.MeshNormalMaterial()
+    }
+  );
+  scene.add(emitter);
 
-// //   const camera = new $3.PerspectiveCamera(80, windowWidth / windowHeight);
-// //   camera.position.set(30, 10, 30);
-// //   camera.lookAt(scene.position);
+  const antiAttractor = new Kotletkas.AntiAttractor(
+    new $3.ConeBufferGeometry(2, 5, 16, 32),
+    new $3.MeshNormalMaterial()
+  );
+  antiAttractor.position.set(0, 0, 15);
+  scene.add(antiAttractor);
 
-// //   const renderer = new $3.WebGLRenderer({antialias: true});
-// //   renderer.setSize(windowWidth, windowHeight);
-// //   renderer.setPixelRatio(window.devicePixelRatio);
-// //   document.body.appendChild(renderer.domElement);
+  const antiAttractor2 = new Kotletkas.AntiAttractor(
+    new $3.BoxBufferGeometry(5, 5, 5),
+    new $3.MeshNormalMaterial()
+  );
+  antiAttractor2.position.set(-2, 5, 0);
+  scene.add(antiAttractor2);
 
-// //   const
-// //     emitter = new Kotletkas.BasicEmitter(scene, new $3.Mesh(
-// //       new $3.PlaneGeometry(0.1, 0.1),
-// //       new $3.MeshBasicMaterial({
-// //         color: 0xffffff
-// //       })
-// //     ), {
-// //       geometry: new $3.SphereGeometry(0.25, 12, 12),
-// //       material: new $3.MeshBasicMaterial({color: 0xffffff})
-// //     }),
-// //     particleCount = 100,
-// //     particles = [];
+  const kotletkasConfig = {
+    scene,
+    emitter,
+    radius: 25,
+    behaviors: [{
+      affectParticle: function (particle) {
 
-// //   const antiAttractor = new $3.Mesh(
-// //     new $3.ConeBufferGeometry(2, 5, 16, 32),
-// //     new $3.MeshNormalMaterial()
-// //   );
-// //   antiAttractor.position.set(0,0,20);
-// //   antiAttractor.rotation.y = Math.PI / 2;
-// //   scene.add(antiAttractor);
+      }
+    },
+      new Kotletkas.SlowingBehavior(3),
+      antiAttractor,
+      antiAttractor2
+    ]
+  };
 
-// //   for (let i = 0; i < particleCount; ++i) {
-// //     const particle = emitter.emitParticle();
-// //     particles.push(particle);
-// //   }
+  const k = new Kotletkas.Sandbox(kotletkasConfig);
 
-// //   (function render() {
-// //     for (let i in particles) {
-// //       const particle = particles[i];
-// //       particle.framesAlive++;
-// //       if (particle.mesh.position.distanceTo(emitter.mesh.position) > 40) {
-// //         emitter.emitParticle(particle);
-// //       } else {
-// //         const newVelocity = new $3.Vector3()
-// //           .copy(particle.mesh.position)
-// //           .sub(antiAttractor.position)
-// //           .normalize()
-// //           .multiplyScalar((particle.mesh.position
-// //             .distanceTo(antiAttractor.position) ** -2
-// //           ) * 0.4);
-
-// //         particle.velocity.add(newVelocity);
-// //         particle.mesh.position.add(particle.velocity);
-// //       }
-// //     }
-
-// //     renderer.render(scene, camera);
-// //     requestAnimationFrame(render);
-// //   })();
-// // })($3, window.innerWidth, window.innerHeight);
+  (function animate() {
+    k.prepareToRender();
+    renderer.render(scene, camera);
+    requestAnimationFrame(animate);
+  })();
+})(THREE, window.innerWidth, window.innerHeight);
