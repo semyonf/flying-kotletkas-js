@@ -1,10 +1,10 @@
 namespace Kotletkas {
   export class Particle extends THREE.Mesh {
-    public velocity: THREE.Vector3;
-    public framesAlive: number = 0;
+    velocity: THREE.Vector3;
+    framesAlive: number = 0;
 
     constructor(
-      geometry: THREE.Geometry,
+      geometry: THREE.BufferGeometry,
       material: THREE.Material,
       velocity: THREE.Vector3 = new THREE.Vector3(0, 0, 0)
     ) {

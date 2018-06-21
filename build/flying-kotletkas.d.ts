@@ -2,79 +2,55 @@ declare namespace Kotletkas {
     class Particle extends THREE.Mesh {
         velocity: THREE.Vector3;
         framesAlive: number;
-        constructor(geometry: THREE.Geometry, material: THREE.Material, velocity?: THREE.Vector3);
+        constructor(geometry: THREE.BufferGeometry, material: THREE.Material, velocity?: THREE.Vector3);
     }
 }
 declare namespace Kotletkas {
     interface IParticleParams {
-        geometry: THREE.Geometry;
-        material: THREE.Material;
         count: number;
         lifespan: number;
+        geometry: THREE.BufferGeometry;
+        material: THREE.Material;
     }
 }
 declare namespace Kotletkas {
     class Emitter extends THREE.Mesh {
         particleParams: IParticleParams;
-        onNewParicleEmit(newParticle: Particle): void;
-        onExistingParicleEmit(existingParticle: Particle): void;
+        onNewParticleEmit(newParticle: Particle): void;
+        onExistingParticleEmit(existingParticle: Particle): void;
+        init(): void;
         emitParticle(existingParticle?: Particle): Particle;
         constructor(geometry: THREE.Geometry | THREE.BufferGeometry, material: THREE.Material, particleParams: IParticleParams);
     }
 }
 declare namespace Kotletkas {
-    interface IConfigItem {
-        role: string;
-        geometry: THREE.Geometry | THREE.BufferGeometry;
-        material: THREE.Material;
-        name?: string;
-        position?: {
-            x: number;
-            y: number;
-            z: number;
-        };
-    }
-}
-declare namespace Kotletkas {
-    interface IEmitterConfigItem extends IConfigItem {
-        particleParams: IParticleParams;
-    }
-}
-declare namespace Kotletkas {
-    interface IForce {
-        strength: number;
+    interface IParticleBehavior {
+        strength?: number;
         affectParticle(particle: Particle): void;
-    }
-}
-declare namespace Kotletkas {
-    interface IForceFieldConfigItem extends IConfigItem {
-        strength: number;
     }
 }
 declare namespace Kotletkas {
     interface ISandboxConfig {
         scene: THREE.Scene;
-        systemRadius: number;
-        emitter: IEmitterConfigItem;
-        forceFields: Array<IForceFieldConfigItem>;
+        emitter: Emitter;
+        radius: number;
+        behaviors: Array<IParticleBehavior>;
     }
 }
 declare namespace Kotletkas {
-    class SlowingForce implements IForce {
+    class SlowingBehavior implements IParticleBehavior {
         strength: number;
         affectParticle(particle: Particle): void;
-        constructor();
+        constructor(strength: number);
     }
 }
 declare namespace Kotletkas {
     class Sandbox {
         private scene;
-        private systemRadius;
         private emitter;
-        private particleLifeSpan;
-        private forces;
+        private radius;
+        private behaviors;
         private particles;
-        private createEmitter;
         prepareToRender(): void;
         constructor(config: ISandboxConfig);
     }

@@ -33,22 +33,25 @@ var Kotletkas;
             _this.particleParams = particleParams;
             return _this;
         }
-        Emitter.prototype.onNewParicleEmit = function (newParticle) {
-            newParticle.velocity = new THREE.Vector3(0, 0, 0.5 * Math.random());
-        };
-        Emitter.prototype.onExistingParicleEmit = function (existingParticle) {
-            existingParticle.velocity = new THREE.Vector3(0, 0, Math.random());
+        Emitter.prototype.onNewParticleEmit = function (newParticle) { };
+        ;
+        Emitter.prototype.onExistingParticleEmit = function (existingParticle) { };
+        Emitter.prototype.init = function () {
+            for (var i = this.particleParams.count; i > 0; i--) {
+                this.emitParticle();
+            }
         };
         Emitter.prototype.emitParticle = function (existingParticle) {
             var particleToEmit;
             if (existingParticle) {
                 particleToEmit = existingParticle;
-                this.onExistingParicleEmit(particleToEmit);
+                this.onExistingParticleEmit(particleToEmit);
             }
             else {
                 particleToEmit = new Kotletkas.Particle(this.particleParams.geometry, this.particleParams.material);
-                this.onNewParicleEmit(particleToEmit);
+                this.onNewParticleEmit(particleToEmit);
             }
+            particleToEmit.velocity = new THREE.Vector3(0, 0, Math.random());
             particleToEmit.position.set(this.position.x, this.position.y, this.position.z);
             return particleToEmit;
         };
@@ -58,62 +61,48 @@ var Kotletkas;
 })(Kotletkas || (Kotletkas = {}));
 var Kotletkas;
 (function (Kotletkas) {
-    var SlowingForce = (function () {
-        function SlowingForce() {
+    var SlowingBehavior = (function () {
+        function SlowingBehavior(strength) {
             this.strength = 1;
+            this.strength = strength;
         }
-        SlowingForce.prototype.affectParticle = function (particle) {
+        SlowingBehavior.prototype.affectParticle = function (particle) {
             particle.velocity.divideScalar(1 + (0.005 * this.strength));
         };
-        return SlowingForce;
+        return SlowingBehavior;
     }());
-    Kotletkas.SlowingForce = SlowingForce;
+    Kotletkas.SlowingBehavior = SlowingBehavior;
 })(Kotletkas || (Kotletkas = {}));
 var Kotletkas;
 (function (Kotletkas) {
     var Sandbox = (function () {
         function Sandbox(config) {
-            this.forces = [];
+            var _this = this;
+            this.behaviors = [];
             this.particles = [];
             this.scene = config.scene;
-            this.systemRadius = config.systemRadius;
-            this.createEmitter(config.emitter);
-            var newParticle;
-            for (var i = 0; i < config.emitter.particleParams.count; ++i) {
-                newParticle = this.emitter.emitParticle();
-                this.scene.add(newParticle);
-                this.particles.push(newParticle);
-            }
-            this.particleLifeSpan = config.emitter.particleParams.lifespan;
-            this.forces.push(new Kotletkas.SlowingForce());
-            for (var i = config.forceFields.length - 1; i >= 0; i--) {
-            }
+            this.emitter = config.emitter;
+            this.radius = config.radius;
+            this.behaviors = config.behaviors;
+            this.emitter.onNewParticleEmit = function (newParticle) {
+                _this.scene.add(newParticle);
+                _this.particles.push(newParticle);
+            };
+            this.emitter.init();
         }
-        Sandbox.prototype.createEmitter = function (e) {
-            switch (e.role) {
-                case "basic-emitter":
-                    this.emitter = new Kotletkas.Emitter(e.geometry, e.material, e.particleParams);
-                    break;
-                default:
-                    throw new Error('Unknown Emitter role!');
-                    break;
-            }
-            this.emitter.position.set(e.position.x, e.position.y, e.position.z);
-            this.scene.add(this.emitter);
-        };
         Sandbox.prototype.prepareToRender = function () {
             for (var i = this.particles.length - 1; i >= 0; i--) {
                 var particle = this.particles[i];
                 particle.position.add(particle.velocity);
                 particle.framesAlive++;
-                if (particle.position.distanceTo(this.emitter.position) > this.systemRadius ||
-                    particle.framesAlive > this.particleLifeSpan) {
+                if (particle.position.distanceTo(this.emitter.position) > this.radius ||
+                    particle.framesAlive > this.emitter.particleParams.lifespan) {
                     particle.framesAlive = 0;
                     this.emitter.emitParticle(particle);
                 }
-                for (var j = this.forces.length - 1; j >= 0; j--) {
-                    var force = this.forces[j];
-                    force.affectParticle(particle);
+                for (var i_1 = this.behaviors.length - 1; i_1 >= 0; i_1--) {
+                    var behavior = this.behaviors[i_1];
+                    behavior.affectParticle(particle);
                 }
             }
         };
@@ -131,31 +120,25 @@ var Kotletkas;
     document.body.appendChild(renderer.domElement);
     var scene = new $3.Scene();
     camera.lookAt(scene.position);
-    var k = new Kotletkas.Sandbox({
-        scene: scene,
-        systemRadius: 50,
-        emitter: {
-            name: 'mainEmitter',
-            role: 'basic-emitter',
-            position: { x: 0, y: 0, z: 0 },
-            geometry: new $3.PlaneGeometry(5, 5),
-            material: new $3.MeshNormalMaterial(),
-            particleParams: {
-                geometry: new THREE.CubeGeometry(0.5, 0.5, 0.5),
-                material: new THREE.MeshBasicMaterial(),
-                count: 5,
-                lifespan: 180
-            }
-        },
-        forceFields: [{
-                name: 'cone',
-                role: 'anti-attractor',
-                position: { x: 0, y: 0, z: 15 },
-                strength: 1,
-                geometry: new $3.ConeGeometry(2, 5, 16, 32),
-                material: new $3.MeshNormalMaterial()
-            }]
+    var emitter = new Kotletkas.Emitter(new THREE.PlaneGeometry(10, 10), new THREE.MeshBasicMaterial(), {
+        count: 10,
+        lifespan: 180,
+        geometry: new THREE.BoxBufferGeometry(0.5, 0.5, 0.5),
+        material: new THREE.MeshNormalMaterial()
     });
+    scene.add(emitter);
+    var kotletkasConfig = {
+        scene: scene,
+        emitter: emitter,
+        radius: 30,
+        behaviors: [{
+                affectParticle: function (particle) {
+                }
+            },
+            new Kotletkas.SlowingBehavior(3)
+        ]
+    };
+    var k = new Kotletkas.Sandbox(kotletkasConfig);
     (function animate() {
         k.prepareToRender();
         renderer.render(scene, camera);

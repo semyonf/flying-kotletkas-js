@@ -1,16 +1,18 @@
 /// <reference path="Particle.ts" />
-/// <reference path="IParticleParams.ts" />
+/// <reference path="IParticleParams.ts"/>
 
 namespace Kotletkas {
   export class Emitter extends THREE.Mesh {
-    public particleParams: IParticleParams
+    public particleParams: IParticleParams;
 
-    public onNewParicleEmit(newParticle: Particle) {
-      newParticle.velocity = new THREE.Vector3(0, 0, 0.5 * Math.random());
-    }
+    public onNewParticleEmit(newParticle: Particle) {};
 
-    public onExistingParicleEmit(existingParticle: Particle) {
-      existingParticle.velocity = new THREE.Vector3(0, 0, Math.random());
+    public onExistingParticleEmit(existingParticle: Particle) {}
+
+    init() {
+      for (let i = this.particleParams.count; i > 0; i--) {
+        this.emitParticle();
+      }
     }
 
     emitParticle(existingParticle?: Particle) {
@@ -18,15 +20,16 @@ namespace Kotletkas {
 
       if (existingParticle) {
         particleToEmit = existingParticle;
-        this.onExistingParicleEmit(particleToEmit);
+        this.onExistingParticleEmit(particleToEmit);
       } else {
         particleToEmit = new Particle(
           this.particleParams.geometry,
           this.particleParams.material
         );
-        this.onNewParicleEmit(particleToEmit);
+        this.onNewParticleEmit(particleToEmit);
       }
 
+      particleToEmit.velocity = new THREE.Vector3(0, 0, Math.random());
       particleToEmit.position.set(
         this.position.x, this.position.y, this.position.z
       );
@@ -35,7 +38,7 @@ namespace Kotletkas {
     }
 
     constructor(
-      geometry: THREE.Geometry|THREE.BufferGeometry,
+      geometry: THREE.Geometry | THREE.BufferGeometry,
       material: THREE.Material,
       particleParams: IParticleParams,
     ) {

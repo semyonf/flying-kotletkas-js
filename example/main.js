@@ -23,7 +23,7 @@
 //         lifespan: 180
 //       }
 //     },
-//     forceFields: [{
+//     forces: [{
 //       name: 'cone',
 //       role: 'anti-attractor',
 //       position: {x: 0, y: 0, z: 15},

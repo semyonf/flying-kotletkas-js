@@ -1,8 +1,8 @@
 namespace Kotletkas {
   export interface IParticleParams {
-    geometry: THREE.Geometry;
-    material: THREE.Material;
     count: number;
     lifespan: number;
+    geometry: THREE.BufferGeometry;
+    material: THREE.Material;
   }
 }
