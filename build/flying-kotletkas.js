@@ -49,6 +49,28 @@ var Kotletkas;
 })(Kotletkas || (Kotletkas = {}));
 var Kotletkas;
 (function (Kotletkas) {
+    var Attractor = (function (_super) {
+        __extends(Attractor, _super);
+        function Attractor(geometry, material, strength) {
+            var _this = _super.call(this, geometry, material) || this;
+            _this.strength = strength;
+            return _this;
+        }
+        Attractor.prototype.affectParticle = function (particle) {
+            var newVelocity = new THREE.Vector3()
+                .copy(particle.position)
+                .sub(this.position)
+                .normalize()
+                .multiplyScalar((Math.pow(particle.position
+                .distanceTo(this.position), -2)) * 0.5);
+            particle.velocity.sub(newVelocity);
+        };
+        return Attractor;
+    }(THREE.Mesh));
+    Kotletkas.Attractor = Attractor;
+})(Kotletkas || (Kotletkas = {}));
+var Kotletkas;
+(function (Kotletkas) {
     var Emitter = (function (_super) {
         __extends(Emitter, _super);
         function Emitter(geometry, material, particleParams) {

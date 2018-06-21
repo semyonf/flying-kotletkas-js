@@ -19,6 +19,13 @@ declare namespace Kotletkas {
     }
 }
 declare namespace Kotletkas {
+    class Attractor extends THREE.Mesh implements IParticleBehavior {
+        strength: number;
+        affectParticle(particle: Kotletkas.Particle): void;
+        constructor(geometry: THREE.Geometry | THREE.BufferGeometry, material: THREE.Material | THREE.Material[], strength: number);
+    }
+}
+declare namespace Kotletkas {
     interface IParticleParams {
         count: number;
         lifespan: number;

@@ -1,7 +1,7 @@
 ///<reference path="IParticleBehavior.ts"/>
 
 namespace Kotletkas {
-  export class AntiAttractor extends THREE.Mesh implements IParticleBehavior {
+  export class Attractor extends THREE.Mesh implements IParticleBehavior {
     strength: number;
 
     affectParticle(particle: Kotletkas.Particle): void {
@@ -11,16 +11,16 @@ namespace Kotletkas {
         .normalize()
         .multiplyScalar((
           particle.position
-            .distanceTo(this.position) ** -2) * 0.4
+            .distanceTo(this.position) ** -2) * 0.5
         );
 
-      particle.velocity.add(newVelocity);
+      particle.velocity.sub(newVelocity);
     }
 
     constructor(
       geometry: THREE.Geometry | THREE.BufferGeometry,
       material: THREE.Material | THREE.Material[],
-      strength: number = 1
+      strength: number
     ) {
       super(geometry, material);
       this.strength = strength;

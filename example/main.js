@@ -16,7 +16,7 @@
     new THREE.MeshBasicMaterial(),
     {
       count: 100,
-      lifespan: 180,
+      lifespan: 300,
       geometry: new THREE.BoxBufferGeometry(0.5, 0.5, 0.5),
       material: new THREE.MeshNormalMaterial()
     }
@@ -27,28 +27,28 @@
     new $3.ConeBufferGeometry(2, 5, 16, 32),
     new $3.MeshNormalMaterial()
   );
-  antiAttractor.position.set(0, 0, 15);
+  antiAttractor.position.set(0, 0, 16);
   scene.add(antiAttractor);
 
-  const antiAttractor2 = new Kotletkas.AntiAttractor(
+  const attractor = new Kotletkas.Attractor(
     new $3.BoxBufferGeometry(5, 5, 5),
     new $3.MeshNormalMaterial()
   );
-  antiAttractor2.position.set(-2, 5, 0);
-  scene.add(antiAttractor2);
+  attractor.position.set(10, -10, -15);
+  scene.add(attractor);
 
   const kotletkasConfig = {
     scene,
     emitter,
-    radius: 25,
+    radius: 30,
     behaviors: [{
       affectParticle: function (particle) {
 
       }
     },
-      new Kotletkas.SlowingBehavior(3),
+      new Kotletkas.SlowingBehavior(2),
       antiAttractor,
-      antiAttractor2
+      attractor
     ]
   };
 
