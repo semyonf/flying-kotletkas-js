@@ -26,6 +26,29 @@ var Kotletkas;
 })(Kotletkas || (Kotletkas = {}));
 var Kotletkas;
 (function (Kotletkas) {
+    var AntiAttractor = (function (_super) {
+        __extends(AntiAttractor, _super);
+        function AntiAttractor(geometry, material, strength) {
+            if (strength === void 0) { strength = 1; }
+            var _this = _super.call(this, geometry, material) || this;
+            _this.strength = strength;
+            return _this;
+        }
+        AntiAttractor.prototype.affectParticle = function (particle) {
+            var newVelocity = new THREE.Vector3()
+                .copy(particle.position)
+                .sub(this.position)
+                .normalize()
+                .multiplyScalar((Math.pow(particle.position
+                .distanceTo(this.position), -2)) * 0.4);
+            particle.velocity.add(newVelocity);
+        };
+        return AntiAttractor;
+    }(THREE.Mesh));
+    Kotletkas.AntiAttractor = AntiAttractor;
+})(Kotletkas || (Kotletkas = {}));
+var Kotletkas;
+(function (Kotletkas) {
     var Emitter = (function (_super) {
         __extends(Emitter, _super);
         function Emitter(geometry, material, particleParams) {
@@ -127,6 +150,9 @@ var Kotletkas;
         material: new THREE.MeshNormalMaterial()
     });
     scene.add(emitter);
+    var antiAttractor = new Kotletkas.AntiAttractor(new $3.ConeBufferGeometry(2, 5, 16, 32), new $3.MeshNormalMaterial());
+    antiAttractor.position.set(0, 0, 20);
+    scene.add(antiAttractor);
     var kotletkasConfig = {
         scene: scene,
         emitter: emitter,
@@ -135,7 +161,8 @@ var Kotletkas;
                 affectParticle: function (particle) {
                 }
             },
-            new Kotletkas.SlowingBehavior(3)
+            new Kotletkas.SlowingBehavior(3),
+            antiAttractor
         ]
     };
     var k = new Kotletkas.Sandbox(kotletkasConfig);

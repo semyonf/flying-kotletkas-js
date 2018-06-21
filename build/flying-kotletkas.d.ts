@@ -6,6 +6,19 @@ declare namespace Kotletkas {
     }
 }
 declare namespace Kotletkas {
+    interface IParticleBehavior {
+        strength?: number;
+        affectParticle(particle: Particle): void;
+    }
+}
+declare namespace Kotletkas {
+    class AntiAttractor extends THREE.Mesh implements IParticleBehavior {
+        strength: number;
+        affectParticle(particle: Kotletkas.Particle): void;
+        constructor(geometry: THREE.Geometry | THREE.BufferGeometry, material: THREE.Material | THREE.Material[], strength?: number);
+    }
+}
+declare namespace Kotletkas {
     interface IParticleParams {
         count: number;
         lifespan: number;
@@ -21,12 +34,6 @@ declare namespace Kotletkas {
         init(): void;
         emitParticle(existingParticle?: Particle): Particle;
         constructor(geometry: THREE.Geometry | THREE.BufferGeometry, material: THREE.Material, particleParams: IParticleParams);
-    }
-}
-declare namespace Kotletkas {
-    interface IParticleBehavior {
-        strength?: number;
-        affectParticle(particle: Particle): void;
     }
 }
 declare namespace Kotletkas {

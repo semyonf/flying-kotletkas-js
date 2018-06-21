@@ -22,6 +22,13 @@
   );
   scene.add(emitter);
 
+  const antiAttractor = new Kotletkas.AntiAttractor(
+    new $3.ConeBufferGeometry(2, 5, 16, 32),
+    new $3.MeshNormalMaterial()
+  );
+  antiAttractor.position.set(0, 0, 20);
+  scene.add(antiAttractor);
+
   const kotletkasConfig = {
     scene,
     emitter,
@@ -31,7 +38,8 @@
 
       }
     },
-      new Kotletkas.SlowingBehavior(3)
+      new Kotletkas.SlowingBehavior(3),
+      antiAttractor
     ],
     // forces: []
   };
