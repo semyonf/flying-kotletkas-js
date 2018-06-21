@@ -1,6 +1,7 @@
 ;(function ($3, windowWidth, windowHeight) {
   const camera = new $3.PerspectiveCamera(80, windowWidth / windowHeight);
   camera.position.set(30, 10, 30);
+  new $3.OrbitControls(camera);
 
   const renderer = new $3.WebGLRenderer({antialias: true});
   renderer.setSize(windowWidth, windowHeight);
@@ -11,13 +12,15 @@
   camera.lookAt(scene.position);
 
   const emitter = new Kotletkas.VariableAngleEmitter(
-    new THREE.PlaneGeometry(5,5),
-    new THREE.MeshBasicMaterial(),
+    new $3.PlaneGeometry(5,5),
+    new $3.MeshBasicMaterial({
+      side: $3.DoubleSide
+    }),
     {
       count: 100,
       lifespan: 300,
-      geometry: new THREE.BoxBufferGeometry(0.5, 0.5, 0.5),
-      material: new THREE.MeshBasicMaterial()
+      geometry: new $3.BoxBufferGeometry(0.5, 0.5, 0.5),
+      material: new $3.MeshBasicMaterial()
     }
   );
   scene.add(emitter);
