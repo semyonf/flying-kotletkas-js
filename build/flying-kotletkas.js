@@ -15,7 +15,7 @@ var Kotletkas;
         __extends(Particle, _super);
         function Particle(geometry, material, velocity) {
             if (velocity === void 0) { velocity = new THREE.Vector3(0, 0, 0); }
-            var _this = _super.call(this, geometry, material) || this;
+            var _this = _super.call(this, geometry.clone(), material.clone()) || this;
             _this.framesAlive = 0;
             _this.velocity = velocity;
             return _this;

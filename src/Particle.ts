@@ -8,7 +8,7 @@ namespace Kotletkas {
       material: THREE.Material,
       velocity: THREE.Vector3 = new THREE.Vector3(0, 0, 0)
     ) {
-      super(geometry, material);
+      super(geometry.clone(), material.clone());
       this.velocity = velocity;
     }
   }

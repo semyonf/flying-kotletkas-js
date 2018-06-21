@@ -17,7 +17,7 @@
       count: 100,
       lifespan: 300,
       geometry: new THREE.BoxBufferGeometry(0.5, 0.5, 0.5),
-      material: new THREE.MeshNormalMaterial()
+      material: new THREE.MeshBasicMaterial()
     }
   );
   scene.add(emitter);
@@ -30,7 +30,7 @@
   scene.add(antiAttractor);
 
   const attractor = new Kotletkas.Attractor(
-    new $3.BoxBufferGeometry(5, 5, 5),
+    new $3.BoxBufferGeometry(2, 2, 2),
     new $3.MeshNormalMaterial()
   );
   attractor.position.set(10, -10, -15);
@@ -42,7 +42,10 @@
     radius: 30,
     behaviors: [{
       affectParticle: function (particle) {
-
+        const distance = particle.position.distanceTo(emitter.position);
+        particle.material.color = new $3.Color(
+          `hsl(${20 + kotletkasConfig.radius - distance << 0}, 100%, 50%)`
+        );
       }
     },
       new Kotletkas.AccelerationBehavior(-2),
