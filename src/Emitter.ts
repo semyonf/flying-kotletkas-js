@@ -7,7 +7,7 @@ namespace Kotletkas {
 
     // @todo refactoring
     getInitialVelocity(): THREE.Vector3 {
-      return new THREE.Vector3(0, 0, Math.random());
+      return new THREE.Vector3(0, 0, Math.random() / 3);
     }
 
     onAnyParticleEmit(particleToEmit: Kotletkas.Particle) {

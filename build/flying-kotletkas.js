@@ -93,7 +93,7 @@ var Kotletkas;
             return _this;
         }
         Emitter.prototype.getInitialVelocity = function () {
-            return new THREE.Vector3(0, 0, Math.random());
+            return new THREE.Vector3(0, 0, Math.random() / 3);
         };
         Emitter.prototype.onAnyParticleEmit = function (particleToEmit) {
         };
