@@ -5,15 +5,19 @@ namespace Kotletkas {
   export class Emitter extends THREE.Mesh {
     public particleParams: IParticleParams;
 
+    // @todo refactoring
     getInitialVelocity(): THREE.Vector3 {
       return new THREE.Vector3(0, 0, Math.random());
     }
 
+    onAnyParticleEmit(particleToEmit: Kotletkas.Particle) {
+    }
+
     onNewParticleEmit(newParticle: Particle) {
-    };
+    }
 
     onExistingParticleEmit(existingParticle: Particle) {
-    };
+    }
 
     init() {
       for (let i = this.particleParams.count; i > 0; i--) {
@@ -39,6 +43,8 @@ namespace Kotletkas {
       particleToEmit.position.set(
         this.position.x, this.position.y, this.position.z
       );
+
+      this.onAnyParticleEmit(particleToEmit);
 
       return particleToEmit;
     }

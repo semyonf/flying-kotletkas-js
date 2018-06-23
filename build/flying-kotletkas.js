@@ -95,12 +95,12 @@ var Kotletkas;
         Emitter.prototype.getInitialVelocity = function () {
             return new THREE.Vector3(0, 0, Math.random());
         };
+        Emitter.prototype.onAnyParticleEmit = function (particleToEmit) {
+        };
         Emitter.prototype.onNewParticleEmit = function (newParticle) {
         };
-        ;
         Emitter.prototype.onExistingParticleEmit = function (existingParticle) {
         };
-        ;
         Emitter.prototype.init = function () {
             for (var i = this.particleParams.count; i > 0; i--) {
                 this.emitParticle();
@@ -118,11 +118,45 @@ var Kotletkas;
             }
             particleToEmit.velocity = this.getInitialVelocity();
             particleToEmit.position.set(this.position.x, this.position.y, this.position.z);
+            this.onAnyParticleEmit(particleToEmit);
             return particleToEmit;
         };
         return Emitter;
     }(THREE.Mesh));
     Kotletkas.Emitter = Emitter;
+})(Kotletkas || (Kotletkas = {}));
+var Kotletkas;
+(function (Kotletkas) {
+    var RandomNormalEmitter = (function (_super) {
+        __extends(RandomNormalEmitter, _super);
+        function RandomNormalEmitter() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        RandomNormalEmitter.prototype.onAnyParticleEmit = function (particleToEmit) {
+            var emitterGeometry;
+            if (this.geometry instanceof THREE.BufferGeometry) {
+                emitterGeometry = new THREE.Geometry().fromBufferGeometry(this.geometry);
+            }
+            else {
+                emitterGeometry = this.geometry;
+            }
+            var numberOfFaces = (Math.random() * (emitterGeometry.faces.length - 1)) << 0;
+            var face = emitterGeometry.faces[numberOfFaces];
+            var xx = [], yy = [], zz = [];
+            var points = [face.a, face.b, face.c];
+            for (var i in points) {
+                xx.push(emitterGeometry.vertices[points[i]].x);
+                yy.push(emitterGeometry.vertices[points[i]].y);
+                zz.push(emitterGeometry.vertices[points[i]].z);
+            }
+            xx = [Math.max.apply(null, xx), Math.min.apply(null, xx)];
+            yy = [Math.max.apply(null, yy), Math.min.apply(null, yy)];
+            zz = [Math.max.apply(null, zz), Math.min.apply(null, zz)];
+            particleToEmit.position.set(Math.random() * (xx[0] - xx[1]) + (xx[1]), Math.random() * (yy[0] - yy[1]) + (yy[1]), Math.random() * (zz[0] - zz[1]) + (zz[1]));
+        };
+        return RandomNormalEmitter;
+    }(Kotletkas.Emitter));
+    Kotletkas.RandomNormalEmitter = RandomNormalEmitter;
 })(Kotletkas || (Kotletkas = {}));
 var Kotletkas;
 (function (Kotletkas) {

@@ -7,6 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "example": "browser-sync start -s --serveStatic example -f example/* build/*",
+    "debug": "browser-sync start -s --serveStatic debug -f debug/* build/*",
     "postinstall": "bower i"
   },
   "repository": {

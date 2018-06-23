@@ -44,6 +44,7 @@ declare namespace Kotletkas {
     class Emitter extends THREE.Mesh {
         particleParams: IParticleParams;
         getInitialVelocity(): THREE.Vector3;
+        onAnyParticleEmit(particleToEmit: Kotletkas.Particle): void;
         onNewParticleEmit(newParticle: Particle): void;
         onExistingParticleEmit(existingParticle: Particle): void;
         init(): void;
@@ -57,6 +58,11 @@ declare namespace Kotletkas {
         emitter: Emitter;
         radius: number;
         behaviors: Array<IParticleBehavior>;
+    }
+}
+declare namespace Kotletkas {
+    class RandomNormalEmitter extends Emitter {
+        onAnyParticleEmit(particleToEmit: Kotletkas.Particle): void;
     }
 }
 declare namespace Kotletkas {
