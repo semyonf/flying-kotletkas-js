@@ -1,23 +1,14 @@
 {
   "compilerOptions": {
-    "module": "amd",
     "noImplicitAny": true,
+    "moduleResolution": "node",
     "removeComments": true,
     "preserveConstEnums": true,
-    "outFile": "build/flying-kotletkas.js",
     "alwaysStrict": true,
-    "declaration": true,
-    "sourceMap": true,
-    "target": "es3",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
+    "target": "es6",
     "lib": [
       "es6",
       "dom"
     ]
-  },
-  "include": [
-    "src/**/*"
-  ]
+  }
 }
