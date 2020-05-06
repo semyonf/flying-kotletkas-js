@@ -1,11 +1,10 @@
-///<reference path="Emitter.ts"/>
-///<reference path="IParticleBehavior.ts"/>
+import { Emitter } from './Emitter';
+import { IParticleBehavior } from './IParticleBehavior';
+import * as THREE from 'three';
 
-namespace Kotletkas {
-  export interface ISandboxConfig {
-    scene: THREE.Scene;
-    emitter: Emitter;
-    radius: number;
-    behaviors: Array<IParticleBehavior>;
-  }
+export interface ISandboxConfig {
+  scene: THREE.Scene;
+  emitter: Emitter;
+  radius: number;
+  behaviors: Array<IParticleBehavior>;
 }

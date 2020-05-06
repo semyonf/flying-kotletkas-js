@@ -1,8 +1,6 @@
-///<reference path="Particle.ts"/>
+import { Particle } from './Particle';
 
-namespace Kotletkas {
-  export interface IParticleBehavior {
-    strength?: number;
-    affectParticle(particle: Particle): void;
-  }
+export interface IParticleBehavior {
+  strength?: number;
+  affectParticle(particle: Particle): void;
 }
