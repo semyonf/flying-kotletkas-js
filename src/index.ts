@@ -7,8 +7,7 @@ import { VariableAngleEmitter } from './VariableAngleEmitter';
 import { Sandbox } from './Sandbox';
 import { Attractor } from './Attractor';
 
-// @ts-ignore
-window['Kotletkas'] = {
+export const Kotletkas = {
     AccelerationBehavior,
     AntiAttractor,
     Attractor,

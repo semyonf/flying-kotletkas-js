@@ -4,6 +4,7 @@
     "moduleResolution": "node",
     "removeComments": true,
     "preserveConstEnums": true,
+    "allowJs": true,
     "alwaysStrict": true,
     "target": "es6",
     "lib": [

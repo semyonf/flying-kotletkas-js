@@ -5,8 +5,7 @@
   "description": "A three.js particle system plugin I wouldn't dare to use!",
   "main": "index.js",
   "scripts": {
-    "start": "parcel ./src/index.ts",
-    "build": "parcel build --no-minify ./src/index.ts -d build -o flying-kotletkas.js"
+    "build": "webpack --mode=production"
   },
   "repository": {
     "type": "git",
@@ -25,7 +24,9 @@
   "homepage": "https://github.com/taxnuke/flying-kotletkas-js#readme",
   "devDependencies": {
     "@types/three": "^0.103.2",
-    "parcel-bundler": "^1.12.4",
-    "typescript": "^3.8.3"
+    "ts-loader": "^7.0.2",
+    "typescript": "^3.8.3",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
   }
 }
